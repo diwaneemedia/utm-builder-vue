@@ -71,6 +71,7 @@
               label="You will see the generate URL with UTM here..."
               solo
               readonly
+              :success-messages="urlResultSucessMesage"
               ref="generatedURL"
               ></v-text-field>
             </v-flex>
@@ -126,6 +127,7 @@ export default {
     ],
     traficSource: "Custom",
     randomTriggerUrlResult: 0,
+    urlResultSucessMesage: ""
   }),
   computed: {
     urlResult: function(){
@@ -148,6 +150,12 @@ export default {
       //console.log(this.$refs.generatedURL.$el.getElementsByTagName('input')[0]);
       this.$refs.generatedURL.$el.getElementsByTagName('input')[0].select();
       window.document.execCommand("copy");
+      if (this.urlResult && this.urlResult.length > 0) {
+        this.urlResultSucessMesage = "Copied"
+        setTimeout(()=>{
+          this.urlResultSucessMesage = ""
+        },2000)
+      }
     }
   }
 }
