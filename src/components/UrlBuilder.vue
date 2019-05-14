@@ -29,7 +29,7 @@
         <v-flex xs9>
           <v-text-field
           v-model="url"
-          label="mysite.com"
+          label="Type URL here"
           solo
           ></v-text-field>
         </v-flex>
@@ -53,7 +53,7 @@
       
     </v-container>
     
-    <component v-bind:is='traficSource'> </component>
+    <component v-bind:is='traficSource' ref="traficSrcRef"> </component>
     
     <v-container>
       
@@ -64,28 +64,35 @@
             Result
           </h2>
           <v-layout row wrap>            
-
-              <v-flex xs10>
-                <v-text-field
-                v-model="result"
-                label="You will see the generate URL with UTM here..."
-                solo
-                ></v-text-field>
-              </v-flex>
-              
-              <v-flex xs2>
-                <v-btn class="form-inline-button" large height="48px">Copy</v-btn>
-              </v-flex>           
             
-          </v-layout>
-        </v-flex>
-        
-      </v-layout>
+            <v-flex xs10>
+              <v-text-field
+              v-model="urlResult"
+              label="You will see the generate URL with UTM here..."
+              solo
+              readonly
+              ref="generatedURL"
+              ></v-text-field>
+            </v-flex>
+            
+            <v-flex xs2>
+              <v-btn 
+              class="form-inline-button" 
+              large
+              v-on:click='copyURL'>
+              Copy
+            </v-btn>
+          </v-flex>           
+          
+        </v-layout>
+      </v-flex>
       
-    </v-container>
+    </v-layout>
     
-  </div>
+  </v-container>
   
+</div>
+
 </template>
 
 <script>
@@ -118,8 +125,31 @@ export default {
       {label:'Instagram', component:'Instagram'},       
     ],
     traficSource: "Custom",
-    result: "",
-  })
+    randomTriggerUrlResult: 0,
+  }),
+  computed: {
+    urlResult: function(){
+      let x = this.randomTriggerUrlResult; // just for triggering watch
+      let queryArr = [];
+      let refObj = this.$refs.traficSrcRef || {};
+      let queryObj = refObj.$data || {};
+      Object.keys(queryObj).forEach((key)=>{
+        if (queryObj[key] && queryObj[key] != "") {
+          queryArr.push(`${key}=${queryObj[key]}`)
+        }
+      })
+      let query = (queryArr.length > 0) ? '?'+queryArr.join('&') : "";
+      let site = (this.url != "") ? `${this.protocol}${this.url}` : "";  
+      return `${site}${query}`;
+    }
+  },
+  methods: {
+    copyURL(){
+      //console.log(this.$refs.generatedURL.$el.getElementsByTagName('input')[0]);
+      this.$refs.generatedURL.$el.getElementsByTagName('input')[0].select();
+      window.document.execCommand("copy");
+    }
+  }
 }
 </script>
 
