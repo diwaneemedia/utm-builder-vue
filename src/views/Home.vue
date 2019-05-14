@@ -1,23 +1,16 @@
 <template>
-  <HelloWorld />
+  <div>
+    <UrlBuilder />
+  </div>
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
+
+  import UrlBuilder from '../components/UrlBuilder'
 
   export default {
     components: {
-      HelloWorld
+      UrlBuilder,
     }
   }
-</script>
-ias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
 </script>

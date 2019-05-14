@@ -16,19 +16,15 @@
     </v-toolbar>
 
     <v-content>
-      <HelloWorld/>
+      <router-view/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  },
   data () {
     return {
       //
@@ -36,3 +32,11 @@ export default {
   }
 }
 </script>
+
+<style lang='scss'>
+  .form-inline-button {
+    width: 100%;
+    height: 48px;
+    margin: 0;
+  }
+</style>
