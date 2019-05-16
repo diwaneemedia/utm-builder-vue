@@ -15,31 +15,48 @@
           </v-flex>
           
           <v-flex xs12>
-            <div>Campaign source</div>
+            <div>Campaign source (utm_source)</div>
             <v-text-field
             v-model="utm_source"
             label="googel, facebook, instagram"
             solo
-            ></v-text-field>
+            >            
+              <template  v-slot:append>
+                <HelpDialog title='Required parameters'>
+                  <HelpTextUtmSource/>
+                </HelpDialog>
+              </template>           
+            </v-text-field>                        
           </v-flex>
           
           <v-flex xs12>
-            <div>Campaign medium</div>
+            <div>Campaign medium (utm_medium)</div>
             <v-text-field
             v-model="utm_medium"
             label="cpc, email, banner, article"
             solo
-            ></v-text-field>
+            >
+              <template  v-slot:append>
+                <HelpDialog title='Required parameters'>
+                  <HelpTextUtmMedium/>
+                </HelpDialog>
+              </template>  
+            </v-text-field>
           </v-flex>
           
           <v-flex xs12>
-            <div>Campaign name</div>
+            <div>Campaign name (utm_campaign)</div>
             <v-text-field
             v-model="utm_campaign"
             label="promo, discount, sale"
             solo
-            ></v-text-field>
-            
+            >
+            <template  v-slot:append>
+              <HelpDialog title='Required parameters'>
+                <HelpTextUtmCampaign/>
+              </HelpDialog>
+            </template>  
+            </v-text-field>            
           </v-flex>
           
         </v-layout>
@@ -57,21 +74,33 @@
           </v-flex>
           
           <v-flex xs12>
-            <div>Campaign term</div>
+            <div>Campaign term (utm_term)</div>
             <v-text-field
-            v-model="utm_content"
+            v-model="utm_term"
             label="link, landing page"
             solo
-            ></v-text-field>
+            >
+              <template  v-slot:append>
+                <HelpDialog title='Required parameters'>
+                  <HelpTextUtmTerm/>
+                </HelpDialog>
+              </template>  
+            </v-text-field>
           </v-flex>
           
           <v-flex xs12>
-            <div>Campaign content</div>
+            <div>Campaign content (utm_content)</div>
             <v-text-field
-            v-model="utm_term"
+            v-model="utm_content"
             label="free, -30%, registration"
             solo
-            ></v-text-field>
+            >
+              <template  v-slot:append>
+                <HelpDialog title='Required parameters'>
+                  <HelpTextUtmContent/>
+                </HelpDialog>
+              </template>  
+            </v-text-field>
             
           </v-flex>
           
@@ -87,7 +116,23 @@
 
 <script>
 
+import HelpDialog from './HelpDialog'
+import HelpTextUtmSource from './HelpTextUtmSource'
+import HelpTextUtmMedium from './HelpTextUtmMedium'
+import HelpTextUtmCampaign from './HelpTextUtmCampaign'
+import HelpTextUtmTerm from './HelpTextUtmTerm'
+import HelpTextUtmContent from './HelpTextUtmContent'
+
+
 export default {
+  components: {
+    HelpDialog,
+    HelpTextUtmSource,
+    HelpTextUtmMedium,
+    HelpTextUtmCampaign,
+    HelpTextUtmTerm,
+    HelpTextUtmContent
+  },
   data: () => ({
     utm_source: "",
     utm_medium: "",
@@ -97,8 +142,7 @@ export default {
   }),
   mounted: function(){
     this.$parent.randomTriggerUrlResult = Math.floor((Math.random() * 10000) + 1);;
-  }
-  
+  },  
 }
 
 </script>
