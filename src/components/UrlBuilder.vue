@@ -1,23 +1,16 @@
 <template>
   
   <v-form ref='form'>
-    
-    <v-container>   
+  
+    <v-container grid-list-md>          
       
-      <v-layout row wrap>
-        
-        <v-flex xs12>
-          <h1 class="">
-            Campaign URL Builder
-          </h1>
-        </v-flex>
-        
+      <!-- URL -->
+      <v-layout row wrap >        
         <v-flex xs12>
           <h2 class="">
             Destination URL
           </h2>
-        </v-flex>
-        
+        </v-flex>        
         <v-flex xs3>
           <v-select
           v-model="protocol"
@@ -26,8 +19,7 @@
           single-line
           outline
           ></v-select>
-        </v-flex>
-        
+        </v-flex>        
         <v-flex xs9>
           <v-text-field
           v-model="url"
@@ -37,39 +29,116 @@
           single-line
           outline
           ></v-text-field>
-        </v-flex>
-        
-        <v-flex xs12>
-          <h2 class="">
-            Traffic source
-          </h2>
-        </v-flex>        
-        
-        <v-radio-group v-model="traficSource" row>
-          <v-radio
-          v-for="source in traficSources"
-          :key="source.label"
-          :label="source.label"
-          :value="source.component"
-          ></v-radio>
-        </v-radio-group>
-        
-      </v-layout>
+        </v-flex>       
+      </v-layout>      
       
     </v-container>
     
-    <component v-bind:is='traficSource' ref="traficSrcRef"> </component>
-    
     <v-container>
       
-      <v-layout row wrap>
-        
+      <!-- Required parameters -->      
+      <v-layout row wrap>          
+        <v-flex xs12>
+          <h2 class="">
+            Required parameters
+          </h2>
+        </v-flex>
+        <!-- utm_source -->         
+        <v-flex xs12>          
+          <v-combobox
+          v-model="utm.utm_source"
+          label="Campaign source (utm_source)"
+          placeholder="google, facebook, instagram"
+          :rules="validations.smallMinusRequired"
+          :items="traficSourcesKeys" 
+          outline >            
+            <template v-slot:append>
+              <HelpDialog title='Required parameters'>
+                <HelpTextUtmSource />
+              </HelpDialog>
+            </template>           
+          </v-combobox>                        
+        </v-flex>        
+        <!-- utm_medium -->
+        <v-flex xs12>
+          <v-combobox
+          v-model="utm.utm_medium"
+          label="Campaign medium (utm_medium)"
+          placeholder="cpc, email, banner, article"
+          :rules="validations.smallMinusRequired"
+          :items="traficSourceValues"
+          outline>
+            <template  v-slot:append>
+              <HelpDialog title='Required parameters'>
+                <HelpTextUtmMedium/>
+              </HelpDialog>
+            </template>  
+          </v-combobox>
+        </v-flex>
+        <!-- utm_campaign -->
+        <v-flex xs12>
+          <v-text-field
+          v-model="utm.utm_campaign"
+          label="Campaign name (utm_campaign)"
+          placeholder="promo, discount, sale"
+          :rules="validations.letterNumberMinusUnderscoreRequired"
+          outline>
+            <template  v-slot:append>
+              <HelpDialog title='Required parameters'>
+                <HelpTextUtmCampaign/>
+              </HelpDialog>
+            </template>  
+          </v-text-field>            
+        </v-flex>  
+      </v-layout>
+
+      <!-- Optional parameters -->        
+      <v-layout row wrap>        
+        <v-flex xs12>
+          <h2 class="">
+            Optional parameters
+          </h2>
+        </v-flex>
+        <!-- utm_term -->
+        <v-flex xs12>
+          <v-text-field
+          v-model="utm.utm_term"
+          label="Campaign term (utm_term)"
+          placeholder="link, landing page"
+          :rules="validations.optional"
+          outline>
+            <template  v-slot:append>
+              <HelpDialog title='Required parameters'>
+                <HelpTextUtmTerm/>
+              </HelpDialog>
+            </template>  
+          </v-text-field>
+        </v-flex>
+        <!-- utm_content -->
+        <v-flex xs12>
+          <v-text-field
+          v-model="utm.utm_content"
+          label="Campaign content (utm_content)"
+          placeholder="free, -30%, registration"
+          :rules="validations.optional"
+          outline>
+            <template  v-slot:append>
+              <HelpDialog title='Required parameters'>
+                <HelpTextUtmContent/>
+              </HelpDialog>
+            </template>  
+          </v-text-field>      
+        </v-flex>
+      </v-layout>
+
+      <!-- Result & Copy -->   
+      <v-layout row wrap>  
         <v-flex xs12>
           <h2 class="">
             Result
           </h2>
           <v-layout row wrap>            
-            
+            <!-- Result -->   
             <v-flex xs10>
               <v-text-field
               v-model="urlResult"
@@ -81,44 +150,44 @@
               ref="generatedURL"
               ></v-text-field>
             </v-flex>
-            
+            <!-- Copy Button -->   
             <v-flex xs2>
               <v-btn 
               class="form-inline-button" 
               large
               color="info"
               v-on:click='copyURL'>
-              Copy
-            </v-btn>
-          </v-flex>           
-          
-        </v-layout>
-      </v-flex>
-      
-    </v-layout>
+                Copy
+              </v-btn>
+            </v-flex>    
+          </v-layout>
+        </v-flex>
+      </v-layout>
+
+    </v-container>
     
-  </v-container>
-  
-</v-form>
+  </v-form>
 
 </template>
 
 <script>
 
-import Custom from './UrlBuilder/SrcCustom';
-import Google from './UrlBuilder/SrcGoogle';
-import Facebook from './UrlBuilder/SrcFacebook';
-import Instagram from './UrlBuilder/SrcInstagram';
+import HelpDialog from './UrlBuilder/HelpDialog'
+import HelpTextUtmSource from './UrlBuilder/HelpTextUtmSource'
+import HelpTextUtmMedium from './UrlBuilder/HelpTextUtmMedium'
+import HelpTextUtmCampaign from './UrlBuilder/HelpTextUtmCampaign'
+import HelpTextUtmTerm from './UrlBuilder/HelpTextUtmTerm'
+import HelpTextUtmContent from './UrlBuilder/HelpTextUtmContent'
 
-export default {
-  
+export default {  
   components: {
-    Custom,
-    Google,
-    Facebook,
-    Instagram
-  },
-  
+    HelpDialog,
+    HelpTextUtmSource,
+    HelpTextUtmMedium,
+    HelpTextUtmCampaign,
+    HelpTextUtmTerm,
+    HelpTextUtmContent
+  },  
   data: () => ({
     protocols: [
       'http://', 
@@ -126,28 +195,48 @@ export default {
     ],
     protocol: "https://",
     url: "",
-    traficSources: [
-      {label:'Your values', component:'Custom'},
-      {label:'Google Adwords', component:'Google'},
-      {label:'Facebook', component:'Facebook'},
-      {label:'Instagram', component:'Instagram'},       
-    ],
-    traficSource: "Custom",
-    randomTriggerUrlResult: 1,
+    utm: {
+      utm_source: "",
+      utm_medium: "",
+      utm_campaign: "",
+      utm_content: "",
+      utm_term: "",
+    },
+    traficSources: {
+      'google':['cpc','organic'],
+      'facebook':['cpc','banner'],
+      'instagram':[],       
+    },
+    traficSource: "",
     urlResultSucessMesage: "",
     validations: {
       domain: [
         v => !!v || "This field is required",
         v => /^(?!:\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\.[a-zA-Z]{2,11}?$/.test(v) || "Not a valid domain format "
-      ]
+      ],
+      smallMinusRequired: [    
+        v => !!v || "This field is required",    
+        v => /^[a-z\-]+$/.test(v) || "You can use only small setters and `-` characters"
+      ],
+      letterNumberMinusUnderscoreRequired: [
+        v => !!v || "This field is required",    
+        v => /^[a-zA-Z0-9\-\_]+$/.test(v) || "You can use only letters, numbers and `-` characters"
+      ],
+      optional: [ 
+        v => /^[a-zA-Z0-9\-\_\+\%]*$/.test(v) || "You can use only letters, numbers and `-` characters"
+      ],   
     }
   }),
   computed: {
+    traficSourcesKeys: function(){
+      return Object.keys(this.traficSources);
+    },
+    traficSourceValues: function(){
+      return this.traficSources[this.utm.utm_source] || [];
+    },
     urlResult: function(){
-      let x = this.randomTriggerUrlResult; // just trigger to be watched
+      let queryObj = this.utm || {};
       let queryArr = [];
-      let refObj = this.$refs.traficSrcRef || {};
-      let queryObj = refObj.$data || {};
       Object.keys(queryObj).forEach((key)=>{
         if (queryObj[key] && queryObj[key] != "" && (key.indexOf('utm_')===0)) {
           queryArr.push(`${key}=${queryObj[key]}`)
