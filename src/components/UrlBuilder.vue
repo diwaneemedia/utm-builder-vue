@@ -279,6 +279,7 @@ export default {
       return this.traficSources[this.utm.utm_source] || [];
     },
     urlResult: function(){
+      this.shortenedURL = "";
       let queryObj = this.utm || {};
       let queryArr = [];
       Object.keys(queryObj).forEach((key)=>{
@@ -306,6 +307,7 @@ export default {
         },0)
       }
     }
+    
   },
   methods: {
     generateShortenedURL(){
