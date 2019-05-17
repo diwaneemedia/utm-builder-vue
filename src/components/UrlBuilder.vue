@@ -164,6 +164,48 @@
         </v-flex>
       </v-layout>
 
+      <!-- Shorten URL -->   
+      <v-layout row wrap>  
+        <v-flex xs12>
+          <h2 class="">
+            Shorten URL
+          </h2>
+          <v-layout row wrap>            
+            <!-- Result -->   
+            <v-flex xs10>
+              <v-text-field
+              v-model="shortenedURL"
+              placeholder="You will see the shortened URL for camain..."
+              single-line
+              outline
+              readonly
+              :success-messages="shortenedURLSucessMesage"
+              ref="shortenedURL"
+              ></v-text-field>
+            </v-flex>
+            <!-- Generate Button -->   
+            <v-flex xs2>
+              <v-btn 
+              v-if="shortenedURL"
+              class="form-inline-button" 
+              large
+              color="info"
+              v-on:click='copyShortenedURL'>
+                Copy
+              </v-btn>
+              <v-btn 
+              v-else
+              class="form-inline-button" 
+              large
+              color="info"
+              v-on:click='generateShortenedURL'>
+                Generate
+              </v-btn>
+            </v-flex>    
+          </v-layout>
+        </v-flex>
+      </v-layout>
+
     </v-container>
     
   </v-form>
@@ -209,10 +251,12 @@ export default {
     },
     traficSource: "",
     urlResultSucessMesage: "",
+    shortenedURLSucessMesage: "",
+    shortenedURL: "",
     validations: {
       domain: [
         v => !!v || "This field is required",
-        v => /^(?!:\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\.[a-zA-Z]{2,11}?$/.test(v) || "Not a valid domain format "
+        //v => /^[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(v) || "Not a valid domain format "
       ],
       smallMinusRequired: [    
         v => !!v || "This field is required",    
@@ -247,18 +291,52 @@ export default {
       return `${site}${query}`;
     }
   },
+  watch: {
+    url: function(url){
+      if (url.indexOf('http://')===0) {
+        this.protocol = 'http://';
+        setTimeout(()=>{
+          this.url = url.slice(7)
+        },0)
+      }
+      else if (url.indexOf('https://')===0) {
+        this.protocol = 'https://';
+        setTimeout(()=>{
+          this.url = url.slice(8)
+        },0)
+      }
+    }
+  },
   methods: {
+    generateShortenedURL(){
+      if( !this.$refs.form.validate() ) {
+        return;
+      }  
+      this.endpoints_postShorten(this.urlResult)
+        .then((response)=> {
+          this.shortenedURL = response.data.shortUrl
+        });
+    },
     copyURL(){
       if( !this.$refs.form.validate() ) {
         return;
       }      
-      //console.log(this.$refs.generatedURL.$el.getElementsByTagName('input')[0]);
       this.$refs.generatedURL.$el.getElementsByTagName('input')[0].select();
       window.document.execCommand("copy");
       if (this.urlResult && this.urlResult.length > 0) {
         this.urlResultSucessMesage = "Copied"
         setTimeout(()=>{
           this.urlResultSucessMesage = ""
+        },2000)
+      }
+    },
+    copyShortenedURL(){
+      this.$refs.shortenedURL.$el.getElementsByTagName('input')[0].select();
+      window.document.execCommand("copy");
+      if (this.shortenedURL && this.shortenedURL.length > 0) {
+        this.shortenedURLSucessMesage = "Copied"
+        setTimeout(()=>{
+          this.shortenedURLSucessMesage = ""
         },2000)
       }
     }
