@@ -4,7 +4,7 @@
     
     <v-layout row wrap>
       
-      <v-flex xs12 sm6>
+      <v-flex xs12>
         
         <v-layout row wrap>
           
@@ -15,11 +15,12 @@
           </v-flex>
           
           <v-flex xs12>
-            <div>Campaign source (utm_source)</div>
             <v-text-field
             v-model="utm_source"
-            label="googel, facebook, instagram"
-            solo
+            label="Campaign source (utm_source)"
+            placeholder="google, facebook, instagram"
+            :rules="validations.smallMinusRequired"
+            outline
             >            
               <template  v-slot:append>
                 <HelpDialog title='Required parameters'>
@@ -30,26 +31,29 @@
           </v-flex>
           
           <v-flex xs12>
-            <div>Campaign medium (utm_medium)</div>
-            <v-text-field
+            <v-combobox
             v-model="utm_medium"
-            label="cpc, email, banner, article"
-            solo
+            label="Campaign medium (utm_medium)"
+            placeholder="cpc, email, banner, article"
+            :rules="validations.smallMinusRequired"
+            :items="utmMediumItems"
+            outline
             >
               <template  v-slot:append>
                 <HelpDialog title='Required parameters'>
                   <HelpTextUtmMedium/>
                 </HelpDialog>
               </template>  
-            </v-text-field>
+            </v-combobox>
           </v-flex>
           
           <v-flex xs12>
-            <div>Campaign name (utm_campaign)</div>
             <v-text-field
             v-model="utm_campaign"
-            label="promo, discount, sale"
-            solo
+            label="Campaign name (utm_campaign)"
+            placeholder="promo, discount, sale"
+            :rules="validations.letterNumberMinusUnderscoreRequired"
+            outline
             >
             <template  v-slot:append>
               <HelpDialog title='Required parameters'>
@@ -63,7 +67,7 @@
         
       </v-flex> 
       
-      <v-flex xs12 sm6>
+      <v-flex xs12>
         
         <v-layout row wrap>
           
@@ -74,11 +78,12 @@
           </v-flex>
           
           <v-flex xs12>
-            <div>Campaign term (utm_term)</div>
             <v-text-field
             v-model="utm_term"
-            label="link, landing page"
-            solo
+            label="Campaign term (utm_term)"
+            placeholder="link, landing page"
+            :rules="validations.optional"
+            outline
             >
               <template  v-slot:append>
                 <HelpDialog title='Required parameters'>
@@ -89,11 +94,12 @@
           </v-flex>
           
           <v-flex xs12>
-            <div>Campaign content (utm_content)</div>
             <v-text-field
             v-model="utm_content"
-            label="free, -30%, registration"
-            solo
+            label="Campaign content (utm_content)"
+            placeholder="free, -30%, registration"
+            :rules="validations.optional"
+            outline
             >
               <template  v-slot:append>
                 <HelpDialog title='Required parameters'>
@@ -139,9 +145,28 @@ export default {
     utm_campaign: "",
     utm_content: "",
     utm_term: "",
+    validations: {
+      smallMinusRequired: [    
+        v => !!v || "This field is required",    
+        v => /^[a-z\-]+$/.test(v) || "You can use only small setters and `-` characters"
+      ],
+      letterNumberMinusUnderscoreRequired: [
+        v => !!v || "This field is required",    
+        v => /^[a-zA-Z0-9\-\_]+$/.test(v) || "You can use only letters, numbers and `-` characters"
+      ],
+      optional: [ 
+        v => /^[a-zA-Z0-9\-\_\+\%]*$/.test(v) || "You can use only letters, numbers and `-` characters"
+      ],      
+    },
+    utmMediumItems: [
+      'cpc',
+      'email',
+      'banner',
+      'article'
+    ]
   }),
   mounted: function(){
-    this.$parent.randomTriggerUrlResult = Math.floor((Math.random() * 10000) + 1);;
+    this.$parent.$parent.randomTriggerUrlResult = Math.floor((Math.random() * 10000) + 1);
   },  
 }
 

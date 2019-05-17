@@ -1,6 +1,6 @@
 <template>
   
-  <div>
+  <v-form ref='form'>
     
     <v-container>   
       
@@ -21,16 +21,21 @@
         <v-flex xs3>
           <v-select
           v-model="protocol"
-          :items="protocols"          
-          solo
+          label="protocol"
+          :items="protocols"
+          single-line
+          outline
           ></v-select>
         </v-flex>
         
         <v-flex xs9>
           <v-text-field
           v-model="url"
-          label="Type URL here"
-          solo
+          label="URL"
+          placeholder="Ender your domain here"
+          :rules="validations.domain"
+          single-line
+          outline
           ></v-text-field>
         </v-flex>
         
@@ -68,8 +73,9 @@
             <v-flex xs10>
               <v-text-field
               v-model="urlResult"
-              label="You will see the generate URL with UTM here..."
-              solo
+              placeholder="You will see the generate URL with UTM here..."
+              single-line
+              outline
               readonly
               :success-messages="urlResultSucessMesage"
               ref="generatedURL"
@@ -80,6 +86,7 @@
               <v-btn 
               class="form-inline-button" 
               large
+              color="info"
               v-on:click='copyURL'>
               Copy
             </v-btn>
@@ -92,7 +99,7 @@
     
   </v-container>
   
-</div>
+</v-form>
 
 </template>
 
@@ -126,17 +133,23 @@ export default {
       {label:'Instagram', component:'Instagram'},       
     ],
     traficSource: "Custom",
-    randomTriggerUrlResult: 0,
-    urlResultSucessMesage: ""
+    randomTriggerUrlResult: 1,
+    urlResultSucessMesage: "",
+    validations: {
+      domain: [
+        v => !!v || "This field is required",
+        v => /^(?!:\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\.[a-zA-Z]{2,11}?$/.test(v) || "Not a valid domain format "
+      ]
+    }
   }),
   computed: {
     urlResult: function(){
-      let x = this.randomTriggerUrlResult; // just for triggering watch
+      let x = this.randomTriggerUrlResult; // just trigger to be watched
       let queryArr = [];
       let refObj = this.$refs.traficSrcRef || {};
       let queryObj = refObj.$data || {};
       Object.keys(queryObj).forEach((key)=>{
-        if (queryObj[key] && queryObj[key] != "") {
+        if (queryObj[key] && queryObj[key] != "" && (key.indexOf('utm_')===0)) {
           queryArr.push(`${key}=${queryObj[key]}`)
         }
       })
@@ -147,6 +160,9 @@ export default {
   },
   methods: {
     copyURL(){
+      if( !this.$refs.form.validate() ) {
+        return;
+      }      
       //console.log(this.$refs.generatedURL.$el.getElementsByTagName('input')[0]);
       this.$refs.generatedURL.$el.getElementsByTagName('input')[0].select();
       window.document.execCommand("copy");
@@ -160,4 +176,3 @@ export default {
   }
 }
 </script>
-
