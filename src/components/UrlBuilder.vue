@@ -4,7 +4,7 @@
   
     <v-container>          
       
-      <!-- URL -->
+      {{/* URL */}}
       <v-layout row wrap >        
         <v-flex xs12>
           <h2 class="headline font-weight-bold">
@@ -36,14 +36,14 @@
     
     <v-container>
       
-      <!-- Required parameters -->      
+      {{/* Required parameters */}}      
       <v-layout row wrap>          
         <v-flex xs12>
           <h2 class="headline font-weight-bold">
             Required parameters
           </h2>
         </v-flex>
-        <!-- utm_source -->         
+        {{/* utm_source */}}         
         <v-flex xs12 pb-0>
           <label>Campaign source (utm_source)</label>       
           <v-combobox mb-0
@@ -60,7 +60,7 @@
             </template>           
           </v-combobox>                        
         </v-flex>        
-        <!-- utm_medium -->
+        {{/* utm_medium */}}
         <v-flex xs12 pb-0 pt-0>
           <label>Campaign medium (utm_medium)</label>
           <v-combobox
@@ -77,7 +77,7 @@
             </template>  
           </v-combobox>
         </v-flex>
-        <!-- utm_campaign -->
+        {{/* utm_campaign */}}
         <v-flex xs12  pb-0 pt-0>
           <label>Campaign name (utm_campaign)</label>
           <v-text-field
@@ -95,14 +95,14 @@
         </v-flex>  
       </v-layout>
 
-      <!-- Optional parameters -->        
+      {{/* Optional parameters */}}        
       <v-layout row wrap>        
         <v-flex xs12>
           <h2 class="headline font-weight-bold">
             Optional parameters
           </h2>
         </v-flex>
-        <!-- utm_term -->
+        {{/* utm_term */}}
         <v-flex xs12  pb-0>
           <label>Campaign term (utm_term)</label>
           <v-text-field
@@ -118,7 +118,7 @@
             </template>  
           </v-text-field>
         </v-flex>
-        <!-- utm_content -->
+        {{/* utm_content */}}
         <v-flex xs12  pb-0 pt-0>
           <label>Campaign content (utm_content)</label>
           <v-text-field
@@ -136,7 +136,7 @@
         </v-flex>
       </v-layout>
 
-      <!-- Result & Copy -->   
+      {{/* Result & Copy */}}   
       <v-layout row wrap>  
         <v-flex xs12>
           <h2 class="headline font-weight-bold">
@@ -145,7 +145,7 @@
         </v-flex>
         <v-flex xs12>
           <v-layout row wrap>            
-            <!-- Result -->   
+            {{/* Result */}}   
             <v-flex xs10>
               <v-text-field
               v-model="urlResult"
@@ -154,10 +154,11 @@
               outline
               readonly
               :success-messages="urlResultSucessMesage"
+              :error-messages="urlResultErrorMesage"
               ref="generatedURL"
               ></v-text-field>
             </v-flex>
-            <!-- Copy Button -->   
+            {{/* Copy Button */}}   
             <v-flex xs2>
               <v-btn 
               class="form-inline-button" 
@@ -171,8 +172,9 @@
         </v-flex>
       </v-layout>
 
-      <!-- Shorten URL -->   
-      <v-layout row wrap>  
+
+      {{/* Shorten URL */}}
+      <!-- <v-layout row wrap>  
         <v-flex xs12>
           <h2 class="headline font-weight-bold">
             Shorten URL
@@ -180,7 +182,7 @@
         </v-flex>
         <v-flex xs12>
           <v-layout row wrap>            
-            <!-- Result -->   
+            {{/* Result */}}   
             <v-flex xs10>
               <v-text-field
               v-model="shortenedURL"
@@ -189,10 +191,11 @@
               outline
               readonly
               :success-messages="shortenedURLSucessMesage"
+              :error-messages="shortenedURLErrorMesage"
               ref="shortenedURL"
               ></v-text-field>
             </v-flex>
-            <!-- Generate Button -->   
+            {{/* Generate Button */}}   
             <v-flex xs2>
               <v-btn 
               v-if="shortenedURL"
@@ -213,7 +216,7 @@
             </v-flex>    
           </v-layout>
         </v-flex>
-      </v-layout>
+      </v-layout> -->
 
     </v-container>
     
@@ -260,7 +263,9 @@ export default {
     },
     traficSource: "",
     urlResultSucessMesage: "",
+    urlResultErrorMesage: "",
     shortenedURLSucessMesage: "",
+    shortenedURLErrorMesage: "",
     shortenedURL: "",
     validations: {
       domain: [
@@ -321,6 +326,8 @@ export default {
   methods: {
     generateShortenedURL(){
       if( !this.$refs.form.validate() ) {
+        this.shortenedURLErrorMesage = "Please fill form properly"
+        this.messagTimeoutedOff('shortenedURLErrorMesage');
         return;
       }  
       this.endpoints_postShorten(this.urlResult)
@@ -330,15 +337,15 @@ export default {
     },
     copyURL(){
       if( !this.$refs.form.validate() ) {
+        this.urlResultErrorMesage = "Please fill form properly"
+        this.messagTimeoutedOff('urlResultErrorMesage');
         return;
       }      
       this.$refs.generatedURL.$el.getElementsByTagName('input')[0].select();
       window.document.execCommand("copy");
       if (this.urlResult && this.urlResult.length > 0) {
         this.urlResultSucessMesage = "Copied"
-        setTimeout(()=>{
-          this.urlResultSucessMesage = ""
-        },2000)
+        this.messagTimeoutedOff('urlResultSucessMesage');
       }
     },
     copyShortenedURL(){
@@ -346,10 +353,14 @@ export default {
       window.document.execCommand("copy");
       if (this.shortenedURL && this.shortenedURL.length > 0) {
         this.shortenedURLSucessMesage = "Copied"
-        setTimeout(()=>{
-          this.shortenedURLSucessMesage = ""
-        },2000)
+        this.messagTimeoutedOff('shortenedURLSucessMesage');
       }
+    },
+    messagTimeoutedOff(field){
+      let _this = this
+      setTimeout(()=>{
+        _this[field] = ""
+      },2000)
     }
   }
 }
