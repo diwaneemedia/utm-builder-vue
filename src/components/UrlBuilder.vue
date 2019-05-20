@@ -2,12 +2,12 @@
   
   <v-form ref='form'>
   
-    <v-container grid-list-md>          
+    <v-container>          
       
       <!-- URL -->
       <v-layout row wrap >        
         <v-flex xs12>
-          <h2 class="">
+          <h2 class="headline font-weight-bold">
             Destination URL
           </h2>
         </v-flex>        
@@ -39,18 +39,19 @@
       <!-- Required parameters -->      
       <v-layout row wrap>          
         <v-flex xs12>
-          <h2 class="">
+          <h2 class="headline font-weight-bold">
             Required parameters
           </h2>
         </v-flex>
         <!-- utm_source -->         
-        <v-flex xs12>          
-          <v-combobox
+        <v-flex xs12 pb-0>
+          <label>Campaign source (utm_source)</label>       
+          <v-combobox mb-0
           v-model="utm.utm_source"
-          label="Campaign source (utm_source)"
           placeholder="google, facebook, instagram"
           :rules="validations.smallMinusRequired"
           :items="traficSourcesKeys" 
+          single-line
           outline >            
             <template v-slot:append>
               <HelpDialog title='Required parameters'>
@@ -60,13 +61,14 @@
           </v-combobox>                        
         </v-flex>        
         <!-- utm_medium -->
-        <v-flex xs12>
+        <v-flex xs12 pb-0 pt-0>
+          <label>Campaign medium (utm_medium)</label>
           <v-combobox
           v-model="utm.utm_medium"
-          label="Campaign medium (utm_medium)"
           placeholder="cpc, email, banner, article"
           :rules="validations.smallMinusRequired"
           :items="traficSourceValues"
+          single-line
           outline>
             <template  v-slot:append>
               <HelpDialog title='Required parameters'>
@@ -76,12 +78,13 @@
           </v-combobox>
         </v-flex>
         <!-- utm_campaign -->
-        <v-flex xs12>
+        <v-flex xs12  pb-0 pt-0>
+          <label>Campaign name (utm_campaign)</label>
           <v-text-field
           v-model="utm.utm_campaign"
-          label="Campaign name (utm_campaign)"
           placeholder="promo, discount, sale"
           :rules="validations.letterNumberMinusUnderscoreRequired"
+          single-line
           outline>
             <template  v-slot:append>
               <HelpDialog title='Required parameters'>
@@ -95,17 +98,18 @@
       <!-- Optional parameters -->        
       <v-layout row wrap>        
         <v-flex xs12>
-          <h2 class="">
+          <h2 class="headline font-weight-bold">
             Optional parameters
           </h2>
         </v-flex>
         <!-- utm_term -->
-        <v-flex xs12>
+        <v-flex xs12  pb-0>
+          <label>Campaign term (utm_term)</label>
           <v-text-field
           v-model="utm.utm_term"
-          label="Campaign term (utm_term)"
           placeholder="link, landing page"
           :rules="validations.optional"
+          single-line
           outline>
             <template  v-slot:append>
               <HelpDialog title='Required parameters'>
@@ -115,12 +119,13 @@
           </v-text-field>
         </v-flex>
         <!-- utm_content -->
-        <v-flex xs12>
+        <v-flex xs12  pb-0 pt-0>
+          <label>Campaign content (utm_content)</label>
           <v-text-field
           v-model="utm.utm_content"
-          label="Campaign content (utm_content)"
           placeholder="free, -30%, registration"
           :rules="validations.optional"
+          single-line
           outline>
             <template  v-slot:append>
               <HelpDialog title='Required parameters'>
@@ -134,9 +139,11 @@
       <!-- Result & Copy -->   
       <v-layout row wrap>  
         <v-flex xs12>
-          <h2 class="">
+          <h2 class="headline font-weight-bold">
             Result
           </h2>
+        </v-flex>
+        <v-flex xs12>
           <v-layout row wrap>            
             <!-- Result -->   
             <v-flex xs10>
@@ -167,9 +174,11 @@
       <!-- Shorten URL -->   
       <v-layout row wrap>  
         <v-flex xs12>
-          <h2 class="">
+          <h2 class="headline font-weight-bold">
             Shorten URL
           </h2>
+        </v-flex>
+        <v-flex xs12>
           <v-layout row wrap>            
             <!-- Result -->   
             <v-flex xs10>
