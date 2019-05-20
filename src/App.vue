@@ -1,8 +1,10 @@
 <template>
   <v-app>
 
-    <v-navigation-drawer app permanent clipped>
-
+    <v-navigation-drawer 
+    app 
+    clipped
+    >
     </v-navigation-drawer>
 
     <v-toolbar
