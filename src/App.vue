@@ -1,23 +1,27 @@
 <template>
   <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>CAMPAIGN URL </span> 
+
+    <v-navigation-drawer app permanent clipped>
+
+    </v-navigation-drawer>
+
+    <v-toolbar
+    app
+    fixed
+    clipped-left
+    height=94
+    >
+      <v-toolbar-title class="subheading text-uppercase">
+        <span class="font-weight-bold">CAMPAIGN URL </span>
         <span class="font-weight-light">BUILDER</span>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <!--v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn-->
+
     </v-toolbar>
 
-    <v-content>
+    <v-content id="main-content">
       <router-view/>
     </v-content>
+
   </v-app>
 </template>
 
@@ -41,5 +45,19 @@ export default {
     margin-left: -3px;
     padding: 0;
     min-width: auto!important;
+  }
+
+  #main-content {
+    background-color: #f5f5f9;
+  }
+  .back-white {
+    background-color: white;
+  }
+  .form-box {
+    //outline: 1px solid blue;
+    max-width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 22px;
   }
 </style>
