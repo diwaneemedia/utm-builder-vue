@@ -313,7 +313,8 @@ export default {
           queryArr.push(`${key}=${queryObj[key]}`)
         }
       })
-      let query = (queryArr.length > 0) ? '?'+queryArr.join('&') : "";
+      let connective = (this.url.indexOf('?')>-1) ? "&" : "?"
+      let query = (queryArr.length > 0) ? connective+queryArr.join('&') : "";
       let site = (this.url != "") ? `${this.protocol}${this.url}` : "";
       return `${site}${query}`;
     }
