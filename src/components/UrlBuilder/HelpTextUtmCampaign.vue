@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <HelpDialog title='Campaign Name'>
 
     <p class="mb-4 t-title_xxs">
       <strong>utm_campaign</strong> — campaign name
@@ -15,5 +15,14 @@
     </ul>
     <p></p>
 
-  </div>
+  </HelpDialog>
 </template>
+
+<script>
+import HelpDialog from './HelpDialog'
+export default {
+  components: {
+    HelpDialog
+  }
+}
+</script>

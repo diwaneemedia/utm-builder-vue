@@ -49,12 +49,8 @@
             :rules="validations.smallMinusRequired"
             :items="traficSourcesKeys"
             single-line
-            outline >
-              <template v-slot:append>
-                <HelpDialog title='Required parameters'>
-                  <HelpTextUtmSource />
-                </HelpDialog>
-              </template>
+            outline >                
+              <HelpTextUtmSource slot='append'/>
             </v-combobox>
           </v-flex>
           {{/* utm_medium */}}
@@ -67,11 +63,7 @@
             :items="traficSourceValues"
             single-line
             outline>
-              <template  v-slot:append>
-                <HelpDialog title='Required parameters'>
-                  <HelpTextUtmMedium/>
-                </HelpDialog>
-              </template>
+              <HelpTextUtmMedium slot='append'/>
             </v-combobox>
           </v-flex>
           {{/* utm_campaign */}}
@@ -83,11 +75,7 @@
             :rules="validations.letterNumberMinusUnderscoreRequired"
             single-line
             outline>
-              <template  v-slot:append>
-                <HelpDialog title='Required parameters'>
-                  <HelpTextUtmCampaign/>
-                </HelpDialog>
-              </template>
+              <HelpTextUtmCampaign slot='append'/>
             </v-text-field>
           </v-flex>
         </v-layout>
@@ -108,11 +96,7 @@
             :rules="validations.optional"
             single-line
             outline>
-              <template  v-slot:append>
-                <HelpDialog title='Required parameters'>
-                  <HelpTextUtmTerm/>
-                </HelpDialog>
-              </template>
+              <HelpTextUtmTerm slot='append'/>
             </v-text-field>
           </v-flex>
           {{/* utm_content */}}
@@ -124,11 +108,7 @@
             :rules="validations.optional"
             single-line
             outline>
-              <template  v-slot:append>
-                <HelpDialog title='Required parameters'>
-                  <HelpTextUtmContent/>
-                </HelpDialog>
-              </template>
+              <HelpTextUtmContent slot='append'/>
             </v-text-field>
           </v-flex>
         </v-layout>

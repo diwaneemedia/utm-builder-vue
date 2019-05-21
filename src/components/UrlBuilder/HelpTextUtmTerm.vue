@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <HelpDialog title='Keyword Term'>
 
     <p class="mb-4 t-title_xxs">
       <strong>utm_term</strong> — The keyword of which ad displaying starts
@@ -11,5 +11,14 @@
     <p>Allows to know two campaign apart in statistics</p>
     <p></p>
 
-  </div>
+  </HelpDialog>
 </template>
+
+<script>
+import HelpDialog from './HelpDialog'
+export default {
+  components: {
+    HelpDialog
+  }
+}
+</script>

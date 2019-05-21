@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <HelpDialog title='The Referrer Source'>
 
     <p class="mb-4 t-title_xxs">
       <strong>utm_source</strong> — the referrer
@@ -17,5 +17,14 @@
     </ul>
     <p></p>
 
-  </div>
+  </HelpDialog>
 </template>
+
+<script>
+import HelpDialog from './HelpDialog'
+export default {
+  components: {
+    HelpDialog
+  }
+}
+</script>
