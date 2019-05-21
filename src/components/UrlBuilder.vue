@@ -2,8 +2,6 @@
 
   <v-form ref='form'>
 
-
-
     <div class="mw-900 form-box mt-5">
       <v-container class="back-white" grid-list-lg px-5 py-4>
 
@@ -34,7 +32,6 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-
 
         {{/* Required parameters */}}
         <v-layout row wrap>
@@ -180,51 +177,9 @@
           </v-flex>
         </v-layout>
 
-
-        {{/* Shorten URL */}}
-        <!-- <v-layout row wrap>
-          <v-flex xs12>
-            <h2 class="headline font-weight-bold">
-              Shorten URL
-            </h2>
-          </v-flex>
-          <v-flex xs12>
-            <v-layout row wrap>
-              {{/* Result */}}
-              <v-flex xs10>
-                <v-text-field
-                v-model="shortenedURL"
-                placeholder="You will see the shortened URL for camain..."
-                single-line
-                outline
-                readonly
-                :success-messages="shortenedURLSucessMesage"
-                :error-messages="shortenedURLErrorMesage"
-                ref="shortenedURL"
-                ></v-text-field>
-              </v-flex>
-              {{/* Generate Button */}}
-              <v-flex xs2>
-                <v-btn
-                v-if="shortenedURL"
-                class="form-inline-button"
-                large
-                color="info"
-                v-on:click='copyShortenedURL'>
-                  Copy
-                </v-btn>
-                <v-btn
-                v-else
-                class="form-inline-button"
-                large
-                color="info"
-                v-on:click='generateShortenedURL'>
-                  Generate
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-        </v-layout> -->
+        <!--URLShortener 
+        :form="$refs.form" 
+        :url="urlResult" /-->
 
       </v-container>
 
@@ -244,6 +199,8 @@ import HelpTextUtmMedium from './UrlBuilder/HelpTextUtmMedium'
 import HelpTextUtmCampaign from './UrlBuilder/HelpTextUtmCampaign'
 import HelpTextUtmTerm from './UrlBuilder/HelpTextUtmTerm'
 import HelpTextUtmContent from './UrlBuilder/HelpTextUtmContent'
+//import URLShortener from './UrlBuilder/URLShortener'
+import validations from './UrlBuilder/validations'
 
 export default {
   components: {
@@ -252,7 +209,8 @@ export default {
     HelpTextUtmMedium,
     HelpTextUtmCampaign,
     HelpTextUtmTerm,
-    HelpTextUtmContent
+    HelpTextUtmContent,
+    //URLShortener
   },
   data: () => ({
     protocols: [
@@ -276,26 +234,7 @@ export default {
     traficSource: "",
     urlResultSucessMesage: "",
     urlResultErrorMesage: "",
-    shortenedURLSucessMesage: "",
-    shortenedURLErrorMesage: "",
-    shortenedURL: "",
-    validations: {
-      domain: [
-        v => !!v || "This field is required",
-        //v => /^[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(v) || "Not a valid domain format "
-      ],
-      smallMinusRequired: [
-        v => !!v || "This field is required",
-        v => /^[a-z\-]+$/.test(v) || "You can use only small setters and `-` characters"
-      ],
-      letterNumberMinusUnderscoreRequired: [
-        v => !!v || "This field is required",
-        v => /^[a-zA-Z0-9\-\_]+$/.test(v) || "You can use only letters, numbers and `-` characters"
-      ],
-      optional: [
-        v => /^[a-zA-Z0-9\-\_\+\%]*$/.test(v) || "You can use only letters, numbers and `-` characters"
-      ],
-    }
+    validations: validations
   }),
   computed: {
     traficSourcesKeys: function(){
@@ -337,17 +276,6 @@ export default {
 
   },
   methods: {
-    generateShortenedURL(){
-      if( !this.$refs.form.validate() ) {
-        this.shortenedURLErrorMesage = "Please fill form properly"
-        this.messagTimeoutedOff('shortenedURLErrorMesage');
-        return;
-      }
-      this.endpoints_postShorten(this.urlResult)
-        .then((response)=> {
-          this.shortenedURL = response.data.shortUrl
-        });
-    },
     copyURL(){
       if( !this.$refs.form.validate() ) {
         this.urlResultErrorMesage = "Please fill form properly"
@@ -359,14 +287,6 @@ export default {
       if (this.urlResult && this.urlResult.length > 0) {
         this.urlResultSucessMesage = "Copied"
         this.messagTimeoutedOff('urlResultSucessMesage');
-      }
-    },
-    copyShortenedURL(){
-      this.$refs.shortenedURL.$el.getElementsByTagName('input')[0].select();
-      window.document.execCommand("copy");
-      if (this.shortenedURL && this.shortenedURL.length > 0) {
-        this.shortenedURLSucessMesage = "Copied"
-        this.messagTimeoutedOff('shortenedURLSucessMesage');
       }
     },
     messagTimeoutedOff(field){
