@@ -157,9 +157,13 @@
           </v-flex>
         </v-layout>
 
-        <!--URLShortener 
+        <URLShortener 
+        ref="URLShortener"
         :form="$refs.form" 
-        :url="urlResult" /-->
+        :url="urlResult" />
+
+        <QRCode 
+        :URLShortener="$refs.URLShortener" />
 
       </v-container>
 
@@ -179,7 +183,8 @@ import HelpTextUtmMedium from './UrlBuilder/HelpTextUtmMedium'
 import HelpTextUtmCampaign from './UrlBuilder/HelpTextUtmCampaign'
 import HelpTextUtmTerm from './UrlBuilder/HelpTextUtmTerm'
 import HelpTextUtmContent from './UrlBuilder/HelpTextUtmContent'
-//import URLShortener from './UrlBuilder/URLShortener'
+import URLShortener from './UrlBuilder/URLShortener'
+import QRCode from './UrlBuilder/QRCode'
 import validations from './UrlBuilder/validations'
 
 export default {
@@ -190,7 +195,8 @@ export default {
     HelpTextUtmCampaign,
     HelpTextUtmTerm,
     HelpTextUtmContent,
-    //URLShortener
+    URLShortener,
+    QRCode
   },
   data: () => ({
     protocols: [
@@ -207,14 +213,17 @@ export default {
       utm_term: "",
     },
     traficSources: {
-      'google':['cpc','organic'],
-      'facebook':['cpc','banner'],
-      'instagram':[],
+      'yasmina-website': ['banners'],
+      'facebook':['fb-traffic', 'cpc'],
+      'instagram':['ig-link-my-photos','ig-stories','cpc'],
+      'twitter': ['tw-traffic'],
+      'yasmina-newsletter': ['email'],
+      'youtube': ['yt-community-post', 'biolink', 'yt-video-description', 'yt-cards', 'yt-end-screen'],
     },
     traficSource: "",
     urlResultSucessMesage: "",
     urlResultErrorMesage: "",
-    validations: validations
+    validations: validations,
   }),
   computed: {
     traficSourcesKeys: function(){

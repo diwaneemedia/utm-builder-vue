@@ -48,14 +48,16 @@
 </div></template>
 
 <script>
-
-
-
 export default {
   props: [
     'form',
-    'url'
+    'url',
   ],
+  watch: {
+    url: function(val) { // from props
+      this.shortenedURL  = "";
+    }
+  },
   data: () => ({
     shortenedURLSucessMesage: "",
     shortenedURLErrorMesage: "",
